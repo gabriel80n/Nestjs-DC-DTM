@@ -1,16 +1,29 @@
-import { IsString, Matches, IsEmail } from 'class-validator';
+// src/user/dto/update-user.dto.ts
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  MinLength,
+  MaxLength,
+  Matches,
+} from 'class-validator';
 
 export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
+  @IsOptional()
   @IsString()
-  code: string;
-
-  @IsString()
-  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d|.*\W).{8,20}$/, {
+  @MinLength(6)
+  @MaxLength(20)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message:
-      'Senha fraca, deve conter de 8 a 20 caracteres, símbolos, letras maiúsculas e minúsculas.',
+      'A senha precisa conter letras maiúsculas, minúsculas e número ou símbolo',
   })
-  newPassword: string;
+  newPassword?: string;
 }

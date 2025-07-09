@@ -30,4 +30,19 @@ export class EmailService {
       html,
     });
   }
+  async sendGeneratedPassword(email: string, password: string) {
+    const html = `
+      <p>Olá!</p>
+      <p>Sua conta foi criada no sistema DC/DTM.</p>
+      <p>Sua senha temporária é: <b>${password}</b></p>
+      <p>Por favor, altere-a após o primeiro login.</p>
+    `;
+
+    await this.transporter.sendMail({
+      from: `"DC/DTM App" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'Sua senha de acesso - DC/DTM',
+      html,
+    });
+  }
 }

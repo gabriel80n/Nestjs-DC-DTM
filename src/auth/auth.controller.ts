@@ -16,7 +16,7 @@ import { IsPublic } from './decorators/is-public.decorator';
 import { EmailService } from 'src/email/email.service';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from 'src/user/dto/update-user.dto';
+import { UpdateUserPasswordDto } from 'src/user/dto/update-user-password.dto';
 
 @Controller()
 export class AuthController {
@@ -48,7 +48,7 @@ export class AuthController {
   }
   @IsPublic()
   @Post('reset-password')
-  async resetPassword(@Body() updateUserDto: UpdateUserDto) {
+  async resetPassword(@Body() updateUserDto: UpdateUserPasswordDto) {
     const user = await this.userService.findByEmail(updateUserDto.email);
     if (!user) throw new NotFoundException('Usuário não encontrado');
 

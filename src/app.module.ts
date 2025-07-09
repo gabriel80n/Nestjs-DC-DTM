@@ -7,9 +7,18 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { EmailModule } from './email/email.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { PatientModule } from './pacient/patient.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, EmailModule],
+  imports: [
+    PrismaModule,
+    UserModule,
+    AuthModule,
+    EmailModule,
+    DashboardModule,
+    PatientModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,

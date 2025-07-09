@@ -11,17 +11,66 @@ generator client {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  password       String
+  name           String
+  type           String
+  firstLogin     Boolean   @default(true)
+  createdAt      DateTime  @default(now())
 
-  email    String @unique
-  password String
+  exams          Exam[]    // Um usuário pode realizar vários exames
 
-  name String
+  PasswordRecoveryCode PasswordRecoveryCode[]
+
+
+  Exam Exam[] @relation("Validators")
 }
+
 
 model PasswordRecoveryCode {
   id         Int      @id @default(autoincrement())
   userId     Int
   code       String
   expiresAt  DateTime
+
+  user       User     @relation(fields: [userId], references: [id])
 }
+
+
+model Patient {
+  id             Int       @id @default(autoincrement())
+  name           String
+  document       String    @unique
+  documentType   String
+  birthDate      DateTime
+  phone          String
+  address        String
+  gender         String
+  race           String
+  maritalStatus  String
+  educationLevel String
+  origin         String
+  annualIncome   Float
+  createdAt      DateTime  @default(now())
+
+  exams          Exam[]    // A patient can have many exams
+}
+
+model Exam {
+  id             Int       @id @default(autoincrement())
+  patientId      Int
+  userId         Int       // who applied the exam
+  status         String    @default("finished") // or "in_progress", "pending_validation"
+  result         String?   // automatic diagnosis: "positive", "negative", etc.
+  observations   String?   // collaborator notes
+  validated      Boolean?  // null = pending, true = validated, false = rejected
+  validatorId    Int?      // FK to User (doctor who validated)
+  validatedAt    DateTime? // when it was validated
+  createdAt      DateTime  @default(now())
+
+  patient        Patient   @relation(fields: [patientId], references: [id])
+  user           User      @relation(fields: [userId], references: [id])
+  validator      User?     @relation("Validators", fields: [validatorId], references: [id])
+}
+
