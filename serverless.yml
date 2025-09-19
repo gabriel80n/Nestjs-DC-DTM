@@ -9,6 +9,17 @@ Resources:
   LambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
+    package:
+      exclude:
+        - node_modules/**
+        - venv/**
+        - src/**
+        - test/**
+        - .vscode/**
+        - .git/**
+        - model/**
+        - README.md
+        - '*.log'
       Handler: dist/serverless.handler
       CodeUri: ./
       Runtime: nodejs18.x
