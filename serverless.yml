@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: API Gateway e Lambda
+
+Resources:
+  ArtifactBucket:
+    Type: AWS::S3::Bucket
+
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: dist/serverless.handler
+      CodeUri: ./
+      Runtime: nodejs18.x
+      Role: "arn:aws:iam::408876511807:role/dc-dtm-lambda" # Obtenha com o time de aws a Role ja cadastrada troca os 0000000000000 pelo numero da conta
+      FunctionName: "api-dc-dtm" # Colocar o nome da app aqui
+      MemorySize: 1024
+      Timeout: 120
+      
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          #Configurações do banco de dados
+          DB_HOST: ""
+
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+      OpenApiVersion: "3.0.1"
+      EndpointConfiguration:
+        Type: "REGIONAL"
+      DefinitionBody:
+        openapi: "3.0.1"
+        info:
+          title: "api-dc-dtm" # Colocar o nome da app aqui o que eu quero que apareca
+        paths:
+          /{proxy+}:
+            x-amazon-apigateway-any-method:
+              parameters:
+                - name: proxy
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations"
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                type: aws_proxy
+          
+  LambdaApiPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - ApiGateway
+      - LambdaFunction
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !Ref LambdaFunction
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/*"
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ["/", ["/aws/lambda", !Ref LambdaFunction]]
+      RetentionInDays: 7 # days
+
+Outputs:
+  ApiUrl:
+    Description: URL da API Gateway
+    Value:
+      Fn::Sub:
+        - https://${ApiId}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/
+        - ApiId: !Ref ApiGateway
+          StageName: v1

@@ -19,7 +19,7 @@ model User {
   firstLogin     Boolean   @default(true)
   createdAt      DateTime  @default(now())
 
-  exams          Exam[]    // Um usuário pode realizar vários exames
+  exams          Exam[]   
 
   PasswordRecoveryCode PasswordRecoveryCode[]
 
@@ -54,22 +54,24 @@ model Patient {
   annualIncome   Float
   createdAt      DateTime  @default(now())
 
-  exams          Exam[]    // A patient can have many exams
+  exams          Exam[]  
 }
 
 model Exam {
   id             Int       @id @default(autoincrement())
-  patientId      Int
-  userId         Int       // who applied the exam
-  status         String    @default("finished") // or "in_progress", "pending_validation"
-  result         String?   // automatic diagnosis: "positive", "negative", etc.
-  observations   String?   // collaborator notes
-  validated      Boolean?  // null = pending, true = validated, false = rejected
-  validatorId    Int?      // FK to User (doctor who validated)
-  validatedAt    DateTime? // when it was validated
+  patientId      Int?
+  userId         Int   
+  status         String    @default("in_progress") 
+  result         Json?   
+  observations   String?  
+  validated      Boolean? 
+  validatorId    Int?     
+  validatedAt    DateTime? 
   createdAt      DateTime  @default(now())
+  answers        Json?  
+  validationChanges Json?
 
-  patient        Patient   @relation(fields: [patientId], references: [id])
+  patient        Patient?  @relation(fields: [patientId], references: [id], onDelete: SetNull)
   user           User      @relation(fields: [userId], references: [id])
   validator      User?     @relation("Validators", fields: [validatorId], references: [id])
 }

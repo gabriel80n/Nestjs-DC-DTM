@@ -4,6 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -14,6 +16,8 @@ import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { User } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserTypeDto } from './dto/update-user-type.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('user')
 export class UserController {
@@ -33,7 +37,7 @@ export class UserController {
   async findByNamePrefix(@Query('name') name: string) {
     return this.userService.findByNamePrefix(name);
   }
-
+  @Roles('admin')
   @Delete(':id')
   async deleteUser(@Param('id') id: number) {
     return this.userService.deleteUser(+id);
@@ -50,5 +54,12 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.userService.updateMe(currentUser.id, updateUserDto);
+  }
+  @Patch(':id/type')
+  async updateUserType(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateUserTypeDto,
+  ) {
+    return this.userService.updateUserType(id, dto.type);
   }
 }

@@ -15,6 +15,7 @@ import { CreatePatientDto } from './dto/create-patient.dto';
 import { PatientService } from './patient.service';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 import { UpdatePatientDto } from './dto/update-patient.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('patients')
 export class PatientController {
@@ -26,7 +27,7 @@ export class PatientController {
     return this.patientService.create(createPacientDto);
   }
 
-  @IsPublic()
+  @Roles('admin')
   @Delete(':id')
   async deletePatient(@Param('id') id: number) {
     await this.patientService.deleteById(id);
@@ -51,5 +52,10 @@ export class PatientController {
     @Body() updatePatientDto: UpdatePatientDto,
   ) {
     return this.patientService.update(id, updatePatientDto);
+  }
+  @Roles('admin')
+  @Delete('/delete/all')
+  async deleteAllPatients() {
+    return this.patientService.deleteAll();
   }
 }

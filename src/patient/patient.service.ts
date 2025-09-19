@@ -61,7 +61,11 @@ export class PatientService {
   async findAll() {
     return await this.prisma.patient.findMany({
       include: {
-        exams: true,
+        exams: {
+          orderBy: {
+            createdAt: 'desc', // <- mais recente primeiro
+          },
+        },
       },
     });
   }
@@ -76,7 +80,11 @@ export class PatientService {
         },
       },
       include: {
-        exams: true,
+        exams: {
+          orderBy: {
+            createdAt: 'desc', // <- mais recente primeiro
+          },
+        },
       },
     });
   }
@@ -85,7 +93,11 @@ export class PatientService {
     const patient = await this.prisma.patient.findUnique({
       where: { id },
       include: {
-        exams: true,
+        exams: {
+          orderBy: {
+            createdAt: 'desc', // <- mais recente primeiro
+          },
+        },
       },
     });
 
@@ -103,5 +115,9 @@ export class PatientService {
       data: updatePatientDto,
     });
     return patient;
+  }
+
+  async deleteAll() {
+    return this.prisma.patient.deleteMany({});
   }
 }

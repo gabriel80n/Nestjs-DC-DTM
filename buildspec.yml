@@ -1,0 +1,38 @@
+version: 0.2
+env:
+  variables:
+    bucketname: "dc-dtm-api"
+    region: "sa-east-1"
+    templateFile: "serverless.yml"
+    profile: "default"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install -g npm@8
+      - npm cache clean --force
+      # - npm install -g typescript
+      # - npm install -g serverless
+      - aws --version
+  pre_build:
+    commands:
+      # - echo Increase the number of allowed open files
+      # - ulimit -n 4096
+      - aws sts get-caller-identity
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm ci
+      - npm run build
+      - npm prune --production
+  post_build:
+    commands:
+      - aws cloudformation package --template-file ${templateFile} --s3-bucket ${bucketname} --region ${region} --output-template-file outputtemplate.yml
+
+artifacts:
+  type: zip
+  files:
+    - outputtemplate.yml

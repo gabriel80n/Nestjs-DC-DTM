@@ -105,4 +105,18 @@ export class UserService {
       password: undefined,
     };
   }
+
+  // src/user/user.service.ts
+  // src/user/user.service.ts
+  async updateUserType(userId: number, type: string): Promise<User> {
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: { type },
+    });
+
+    return {
+      ...updatedUser,
+      password: undefined,
+    };
+  }
 }
