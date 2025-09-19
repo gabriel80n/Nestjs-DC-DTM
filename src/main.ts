@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-async function bootstrap() {
+export default async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Pipes
   app.useGlobalPipes(
@@ -17,7 +17,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({ origin: '*' });
-  await app.listen(3000);
+  return app;
 }
 
 bootstrap();
