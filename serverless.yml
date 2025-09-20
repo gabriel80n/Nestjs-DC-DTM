@@ -29,9 +29,9 @@ Resources:
           #Configurações do banco de dados
           DB_HOST: db-dc-dtm.czs2wu0ogeu6.sa-east-1.rds.amazonaws.com
           DB_PORT: 5432
-          DB_USER: appUser
+          DB_USERNAME: appUser
           DB_PASSWORD: sELzQWa8AVRs7Rw
-          DB_NAME: dc_dtm
+          DB_DATABASE: dc_dtm
           # Sincronização e logging do TypeORM
           DB_SYNCHRONIZE: true              # true para desenvolvimento, false em produção
           DB_LOGGING: false                 # true para logs detalhados, false para silenciar
