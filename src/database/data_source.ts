@@ -12,7 +12,7 @@ const ormConfig = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [join(rootPath, 'dist/**/*.entity{.ts,.js}')],
+  entities: [join(rootPath, 'dist/database/entities/*{.ts,.js}')],
   migrations: [join(rootPath, 'dist/migrations/*{.ts,.js}')],
   synchronize: process.env.DB_SYNCHRONIZE === 'true',
   logging: process.env.DB_LOGGING === 'true',
