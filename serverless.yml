@@ -29,7 +29,7 @@ Resources:
           #Configurações do banco de dados
           DB_HOST: db-dc-dtm.czs2wu0ogeu6.sa-east-1.rds.amazonaws.com
           DB_PORT: 5432
-          DB_USER: dc-dtm-user
+          DB_USER: appUser
           DB_PASSWORD: sELzQWa8AVRs7Rw
           DB_NAME: dc_dtm
           JWT_SECRET: chavejwt
