@@ -9,8 +9,8 @@ Resources:
   LambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: dist/serverless.handler
-      CodeUri: ./
+      Handler: serverless.handler
+      CodeUri: dist/
       Runtime: nodejs18.x
       Role: "arn:aws:iam::408876511807:role/dc-dtm-lambda" # Obtenha com o time de aws a Role ja cadastrada troca os 0000000000000 pelo numero da conta
       FunctionName: "api-dc-dtm" # Colocar o nome da app aqui
