@@ -1,9 +1,9 @@
 import * as fs from 'fs';
-import path, { join } from 'path';
+import { join } from 'path';
 
 const rootPath = process.cwd();
 
-const sslCertPath = path.resolve(__dirname, '../bundle/sa-east-1-bundle.pem');
+const sslCertPath = join(rootPath, 'public', 'sa-east-1-bundle.pem');
 
 const ormConfig = {
   type: 'postgres' as const,
