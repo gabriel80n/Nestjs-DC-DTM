@@ -1,7 +1,7 @@
 import { Callback, Context, Handler } from 'aws-lambda';
 import serverlessExpress from '@codegenie/serverless-express';
 
-import { app } from './app';
+import app from './main';
 
 let server: Handler;
 

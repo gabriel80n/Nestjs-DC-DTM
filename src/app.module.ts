@@ -1,57 +1,51 @@
-import { BadRequestException, Module, ValidationPipe } from '@nestjs/common';
-
-import { APP_PIPE } from '@nestjs/core';
-import { DatabaseModule } from './database/database.module';
-import { HomeModule } from './modules/home/home.module';
-import { InteracaoItemModule } from './modules/interacaoItem/interacaoItem.module';
-import { InteracaoModule } from './modules/interacao/interacao.module';
-import { KeycloakModule } from './modules/keycloak/keycloak.module';
-import { ResponseSuccessInteracoesDTO } from './modules/interacao/dto/response.dto';
-
-export function extractErrors(errors) {
-  const result = [];
-  for (const error of errors) {
-    if (error.children && error.children.length > 0) {
-      result.push(...extractErrors(error.children));
-    } else if (error.constraints) {
-      result.push({
-        property: error.property,
-        message: Object.values(error.constraints).join(', '),
-      });
-    }
-  }
-  return result;
-}
+import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
+import { EmailModule } from './email/email.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { PatientModule } from './patient/patient.module';
+import { ExamModule } from './exam/exam.module';
+import { RolesGuard } from './auth/guards/roles-auth.guard';
+import { Exam } from './database/entities/exam.entity';
+import { PasswordRecoveryCode } from './database/entities/password-recovery-code.entity';
+import { Patient } from './database/entities/patient.entity';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
-    DatabaseModule,
-    HomeModule,
-    InteracaoModule,
-    InteracaoItemModule,
-    KeycloakModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || '5432'),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [User, Patient, Exam, PasswordRecoveryCode],
+      synchronize: true,
+      autoLoadEntities: true,
+    }),
+    UserModule,
+    AuthModule,
+    EmailModule,
+    DashboardModule,
+    PatientModule,
+    ExamModule,
   ],
+  controllers: [AppController],
   providers: [
+    AppService,
     {
-      provide: APP_PIPE,
-      useValue: new ValidationPipe({
-        transform: true,
-        stopAtFirstError: true,
-        exceptionFactory: (errors) => {
-          const extractedErrors = extractErrors(errors);
-          if (extractedErrors.length === 0) {
-            return new BadRequestException({
-              message: 'Validação falhou com erro desconhecido',
-              success: false,
-            });
-          }
-          const response: ResponseSuccessInteracoesDTO = {
-            message: `Erro '${extractedErrors[0]?.property}': ${extractedErrors[0]?.message}`,
-            success: false,
-          };
-          return new BadRequestException(response);
-        },
-      }),
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

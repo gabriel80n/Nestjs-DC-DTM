@@ -16,7 +16,12 @@ Resources:
       FunctionName: "api-dc-dtm" # Colocar o nome da app aqui
       MemorySize: 1024
       Timeout: 120
-      
+      VpcConfig: # Obtenha com time de AWS as configuracoes de VPC (SecurityGroupIds e SubnetIds) e atualizae abaixo
+        SecurityGroupIds:
+          - sg-083e4e66c56b2bd23 # Security Group ID trocar pelo ID do Security Group
+        SubnetIds:
+          - subnet-02b6afdac3b3ea2b1
+          - subnet-03d7059dd57dffccf
       Architectures:
         - x86_64
       Environment:
