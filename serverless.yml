@@ -32,6 +32,14 @@ Resources:
           DB_USER: dc-dtm-user
           DB_PASSWORD: sELzQWa8AVRs7Rw
           DB_NAME: dc_dtm
+          JWT_SECRET: "texto aleatório para proteger sua aplicação"
+
+          # Database
+
+          DATABASE_URL: "file:./sqlite.db"
+
+          EMAIL_USER: suportedcdtm@gmail.com
+          EMAIL_PASS: twii aaet wfvk wyeg
 
   ApiGateway:
     Type: AWS::Serverless::Api
