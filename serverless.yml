@@ -32,11 +32,9 @@ Resources:
           DB_USER: dc-dtm-user
           DB_PASSWORD: sELzQWa8AVRs7Rw
           DB_NAME: dc_dtm
-          JWT_SECRET: "texto aleatório para proteger sua aplicação"
+          JWT_SECRET: chavejwt
 
           # Database
-
-          DATABASE_URL: "file:./sqlite.db"
 
           EMAIL_USER: suportedcdtm@gmail.com
           EMAIL_PASS: twii aaet wfvk wyeg
