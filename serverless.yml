@@ -32,10 +32,28 @@ Resources:
           DB_USER: appUser
           DB_PASSWORD: sELzQWa8AVRs7Rw
           DB_NAME: dc_dtm
+          # Sincronização e logging do TypeORM
+          DB_SYNCHRONIZE: true              # true para desenvolvimento, false em produção
+          DB_LOGGING: false                 # true para logs detalhados, false para silenciar
+
+          # Schema (opcional, se usar schema específico)
+          DB_SCHEMA: public                 # ou outro schema que você usar
+
+          # Configurações SSL
+          DB_REJECT_UNAUTHORIZED: true     # true para rejeitar conexões sem certificado válido
+          DB_ENCRYPT: false                 # true para ativar criptografia (se aplicável)
+          DB_TRUST_SERVER_CERTIFICATE: false # true para confiar no certificado do servidor sem validação completa
+          DB_INTEGRATED_SECURITY: false    # true se usar autenticação integrada (Windows AD)
+
+          # Controle de opções (usar true se quer usar o objeto options)
+          BD_HAS_OPTIONS: true
+
+          # Domínio do controlador (se usar domínio corporativo)
+          DB_DOMAIN_CONTROLLER: ""         # deixe vazio se não usar
+
+
+
           JWT_SECRET: chavejwt
-
-          # Database
-
           EMAIL_USER: suportedcdtm@gmail.com
           EMAIL_PASS: twii aaet wfvk wyeg
 
