@@ -3,6 +3,10 @@ import { User } from './entities/user.entity';
 import { Patient } from './entities/patient.entity';
 import { Exam } from './entities/exam.entity';
 import { PasswordRecoveryCode } from './entities/password-recovery-code.entity';
+import * as fs from 'fs';
+import * as path from 'path';
+
+const sslCertPath = path.resolve(__dirname, '../bundle/sa-east-1-bundle.pem');
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -12,5 +16,9 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   entities: [User, Patient, Exam, PasswordRecoveryCode],
-  synchronize: true, // só para dev. Em prod, use migrations!
+  synchronize: true, // apenas dev
+  ssl: {
+    ca: fs.readFileSync(sslCertPath).toString(),
+    rejectUnauthorized: true,
+  },
 });

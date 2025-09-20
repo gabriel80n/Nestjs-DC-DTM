@@ -16,6 +16,11 @@ import { PasswordRecoveryCode } from './database/entities/password-recovery-code
 import { Patient } from './database/entities/patient.entity';
 import { User } from './user/entities/user.entity';
 
+import * as fs from 'fs';
+import * as path from 'path';
+
+const sslCertPath = path.resolve(__dirname, '../bundle/sa-east-1-bundle.pem');
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -28,6 +33,10 @@ import { User } from './user/entities/user.entity';
       entities: [User, Patient, Exam, PasswordRecoveryCode],
       synchronize: true,
       autoLoadEntities: true,
+      ssl: {
+        ca: fs.readFileSync(sslCertPath).toString(),
+        rejectUnauthorized: true,
+      },
     }),
     UserModule,
     AuthModule,
