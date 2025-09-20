@@ -6,7 +6,10 @@ import { PasswordRecoveryCode } from './entities/password-recovery-code.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const sslCertPath = path.resolve(__dirname, '../bundle/sa-east-1-bundle.pem');
+const sslCertPath = path.resolve(
+  __dirname,
+  '../../bundle/sa-east-1-bundle.pem',
+);
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
