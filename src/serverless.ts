@@ -1,5 +1,5 @@
 import { Callback, Context, Handler } from 'aws-lambda';
-import serverlessExpress from '@codegenie/serverless-express';
+import serverlessExpress from '@vendia/serverless-express';
 
 import app from './main';
 
