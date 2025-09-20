@@ -27,7 +27,11 @@ Resources:
       Environment:
         Variables:
           #Configurações do banco de dados
-          DB_HOST: ""
+          DB_HOST: db-dc-dtm.czs2wu0ogeu6.sa-east-1.rds.amazonaws.com
+          DB_PORT: 5432
+          DB_USER: dc-dtm-user
+          DB_PASSWORD: sELzQWa8AVRs7Rw
+          DB_NAME: dc_dtm
 
   ApiGateway:
     Type: AWS::Serverless::Api
