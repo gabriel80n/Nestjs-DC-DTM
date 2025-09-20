@@ -3,7 +3,7 @@ import { join } from 'path';
 
 const rootPath = process.cwd();
 
-const sslCertPath = join(rootPath, 'public', 'us-east-1-bundle.pem');
+const sslCertPath = join(rootPath, 'bundle', 'us-east-1-bundle.pem');
 
 const ormConfig = {
   type: 'postgres' as const,
