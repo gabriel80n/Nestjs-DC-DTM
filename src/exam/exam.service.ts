@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Exam } from 'src/database/entities/exam.entity';
 import { Patient } from 'src/database/entities/patient.entity';
-import { User } from '../user/entities/user.entity';
+import { User } from 'src/database/entities/user.entity';
 
 import { CreateExamDto } from './dto/exam.dto';
 import { processExamDiagnosis } from './diagnostics/index';

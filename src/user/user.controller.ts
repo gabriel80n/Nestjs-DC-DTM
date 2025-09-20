@@ -17,7 +17,7 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUserTypeDto } from './dto/update-user-type.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { User } from './entities/user.entity';
+import { User } from 'src/database/entities/user.entity';
 
 @Controller('user')
 export class UserController {

@@ -4,7 +4,7 @@ import { IsNull, Not, Repository } from 'typeorm';
 
 import { Patient } from 'src/database/entities/patient.entity';
 import { Exam } from 'src/database/entities/exam.entity';
-import { User } from 'src/user/entities/user.entity';
+import { User } from 'src/database/entities/user.entity';
 import { DashboardStatsDto } from './dto/dashboard-stats.dto';
 
 @Injectable()

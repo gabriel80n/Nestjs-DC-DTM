@@ -10,7 +10,7 @@ import { LoginValidationMiddleware } from './middlewares/login-validation.middle
 import { EmailService } from 'src/email/email.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordRecoveryCode } from 'src/database/entities/password-recovery-code.entity';
-import { User } from 'src/user/entities/user.entity';
+import { User } from 'src/database/entities/user.entity';
 
 @Module({
   imports: [
