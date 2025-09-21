@@ -62,4 +62,9 @@ export class UserController {
   ) {
     return this.userService.updateUserType(id, dto.type);
   }
+  @Post('reset-password')
+  @IsPublic()
+  async resetPassword(@Body() body: { email: string; senha: string }) {
+    return this.userService.resetPasswordByEmail(body.email, body.senha);
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from 'src/database/entities/user.entity';
@@ -9,16 +9,28 @@ import { Repository, ILike } from 'typeorm';
 
 @Injectable()
 export class UserService {
+  userService: any;
   constructor(
     @InjectRepository(User)
     private userRepo: Repository<User>,
     private readonly emailService: EmailService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
+    // Verifica se o usuário já existe
+    const existingUser = await this.userRepo.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('Já existe um usuário com este e-mail.');
+    }
+
+    // Gera e hash da senha
     const generatedPassword = this.generateStrongPassword();
     const hashedPassword = await bcrypt.hash(generatedPassword, 10);
 
+    // Cria o usuário
     const newUser = this.userRepo.create({
       email: createUserDto.email,
       name: createUserDto.name,
@@ -28,6 +40,7 @@ export class UserService {
 
     const savedUser = await this.userRepo.save(newUser);
 
+    // Envia o e-mail com a senha gerada
     await this.emailService.sendGeneratedPassword(
       createUserDto.email,
       generatedPassword,
@@ -36,6 +49,24 @@ export class UserService {
     // Remove o password antes de retornar
     delete savedUser.password;
     return savedUser;
+  }
+
+  async resetPasswordByEmail(
+    email: string,
+    newPassword: string,
+  ): Promise<User> {
+    const user = await this.userRepo.findOne({ where: { email } });
+
+    if (!user) {
+      throw new Error('Usuário não encontrado');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    const updatedUser = await this.userRepo.save(user);
+    delete updatedUser.password;
+    return updatedUser;
   }
 
   async updatePassword(userId: number, hashedPassword: string): Promise<void> {
