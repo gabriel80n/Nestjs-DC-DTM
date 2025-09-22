@@ -30,6 +30,7 @@ export class UserService {
     const generatedPassword = this.generateStrongPassword();
     const hashedPassword = await bcrypt.hash(generatedPassword, 10);
 
+    
     // Cria o usuário
     const newUser = this.userRepo.create({
       email: createUserDto.email,
