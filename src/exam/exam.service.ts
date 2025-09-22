@@ -168,41 +168,52 @@ export class ExamService {
       }
 
       const oldAnswers = exam.answers || {};
-      const normalizedNewAnswers = await this.normalizeAnswers(newAnswers);
+      const hasAnswers = Object.keys(newAnswers || {}).length > 0;
 
-      // Comparar e coletar diferenças
-      const changes: Record<
-        string,
-        { old: string | null; new: string | null }
-      > = {};
+      let changes = null;
 
-      for (const key in normalizedNewAnswers) {
-        const oldValue = oldAnswers[key] ?? null;
-        const newValue = normalizedNewAnswers[key] ?? null;
+      if (hasAnswers) {
+        const normalizedNewAnswers = await this.normalizeAnswers(newAnswers);
 
-        if (oldValue !== newValue) {
-          changes[key] = { old: oldValue, new: newValue };
+        // Detectar mudanças
+        const detectedChanges: Record<
+          string,
+          { old: string | null; new: string | null }
+        > = {};
+
+        for (const key in normalizedNewAnswers) {
+          const oldValue = oldAnswers[key] ?? null;
+          const newValue = normalizedNewAnswers[key] ?? null;
+
+          if (oldValue !== newValue) {
+            detectedChanges[key] = { old: oldValue, new: newValue };
+          }
         }
+
+        // Atualiza respostas apenas se houve mudanças
+        exam.answers = normalizedNewAnswers;
+        exam.observations =
+          normalizedNewAnswers['exam_q11_comentarios'] || null;
+        exam.result = processExamDiagnosis(normalizedNewAnswers);
+        exam.validationChanges =
+          Object.keys(detectedChanges).length > 0 ? detectedChanges : null;
+
+        changes = detectedChanges;
       }
 
-      // Atualiza o exame
+      // Atualiza status de validação
       exam.validated = true;
       exam.status = 'validated';
       exam.validatedAt = new Date();
 
-      // Busca validator para associar
       const validator = await this.userRepo.findOneBy({ id: validatorId });
       if (!validator) {
         throw new NotFoundException(
           `Validador com id ${validatorId} não encontrado.`,
         );
       }
-      exam.validatorId = validatorId;
 
-      exam.answers = normalizedNewAnswers;
-      exam.observations = normalizedNewAnswers['exam_q11_comentarios'] || null;
-      exam.result = processExamDiagnosis(normalizedNewAnswers);
-      exam.validationChanges = Object.keys(changes).length > 0 ? changes : null;
+      exam.validatorId = validatorId;
 
       const updatedExam = await this.examRepo.save(exam);
 

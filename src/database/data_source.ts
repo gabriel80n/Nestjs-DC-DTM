@@ -19,10 +19,10 @@ const ormConfig = {
   synchronize: process.env.DB_SYNCHRONIZE === 'true',
   logging: process.env.DB_LOGGING === 'true',
   schema: process.env.DB_SCHEMA,
-  ssl: {
-    rejectUnauthorized: process.env.DB_REJECT_UNAUTHORIZED === 'true',
-    ca: fs.readFileSync(sslCertPath).toString(),
-  },
+  // ssl: {
+  //   rejectUnauthorized: process.env.DB_REJECT_UNAUTHORIZED === 'true',
+  //   ca: fs.readFileSync(sslCertPath).toString(),
+  // },
   options: {
     encrypt: process.env.DB_ENCRYPT === 'true',
     trustServerCertificate: process.env.DB_TRUST_SERVER_CERTIFICATE === 'true',

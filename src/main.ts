@@ -17,6 +17,7 @@ export default async function bootstrap() {
     }),
   );
   app.enableCors({ origin: '*' });
+  app.listen(3000);
   return app;
 }
 
