@@ -26,8 +26,9 @@ Resources:
         - x86_64
       Environment:
         Variables:
+          PROD: yes
           #Configurações do banco de dados
-          DB_HOST: db-dc-dtm.czs2wu0ogeu6.sa-east-1.rds.amazonaws.com
+          DB_HOST: dc-dtm-rds.cuvki4s6eeao.us-east-1.rds.amazonaws.com
           DB_PORT: 5432
           DB_USERNAME: appUser
           DB_PASSWORD: sELzQWa8AVRs7Rw
