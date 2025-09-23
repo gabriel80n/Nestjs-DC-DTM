@@ -1,8 +1,8 @@
 version: 0.2
 env:
   variables:
-    bucketname: "dc-dtm-api"
-    region: "sa-east-1"
+    bucketname: "codepipeline-us-east-1-644c51ec226d-4931-b56a-c70cbafc146b"
+    region: "us-east-1"
     templateFile: "serverless.yml"
     profile: "default"
 
