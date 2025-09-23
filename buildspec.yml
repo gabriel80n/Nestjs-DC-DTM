@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-    bucketname: "codepipeline-us-east-1-644c51ec226d-4931-b56a-c70cbafc146b"
+    bucketname: "dc-dtm-bucket"
     region: "us-east-1"
     templateFile: "serverless.yml"
     profile: "default"
