@@ -24,7 +24,6 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  @IsPublic()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -63,7 +62,6 @@ export class UserController {
     return this.userService.updateUserType(id, dto.type);
   }
   @Post('reset-password')
-  @IsPublic()
   async resetPassword(@Body() body: { email: string; senha: string }) {
     return this.userService.resetPasswordByEmail(body.email, body.senha);
   }

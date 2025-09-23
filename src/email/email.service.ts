@@ -25,6 +25,7 @@ export class EmailService {
       <p>Olá!</p>
       <p>Seu código para redefinir a senha é: <b>${code}</b></p>
       <p>Esse código é válido por 15 minutos.</p>
+      <p>Após realizar o primeiro login, troque sua senha em: Perfil > Editar dados/Alterar senha .</p>
     `;
 
     try {
