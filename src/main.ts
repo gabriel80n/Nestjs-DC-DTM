@@ -8,6 +8,9 @@ dotenv.config();
 
 export default async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.setGlobalPrefix('api');
+
   // Pipes
   app.useGlobalPipes(
     new ValidationPipe({
@@ -16,11 +19,13 @@ export default async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
   app.enableCors({ origin: '*' });
+
   console.log(process.env.PROD);
-  if (process.env.PROD == 'no') {
-    app.listen(3000);
-  }
+
+  await app.listen(3000, '127.0.0.1');
+
   return app;
 }
 
