@@ -22,7 +22,7 @@ import { User } from 'src/database/entities/user.entity';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  @IsPublic()
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
@@ -61,6 +61,7 @@ export class UserController {
   ) {
     return this.userService.updateUserType(id, dto.type);
   }
+  @IsPublic()
   @Post('reset-password')
   async resetPassword(@Body() body: { email: string; senha: string }) {
     return this.userService.resetPasswordByEmail(body.email, body.senha);

@@ -19,23 +19,8 @@ const ormConfig = {
   synchronize: process.env.DB_SYNCHRONIZE === 'true',
   logging: process.env.DB_LOGGING === 'true',
   schema: process.env.DB_SCHEMA,
-  ssl: {
-    rejectUnauthorized: process.env.DB_REJECT_UNAUTHORIZED === 'true',
-    ca: fs.readFileSync(sslCertPath).toString(),
-  },
-  options: {
-    encrypt: process.env.DB_ENCRYPT === 'true',
-    trustServerCertificate: process.env.DB_TRUST_SERVER_CERTIFICATE === 'true',
-    integratedSecurity: process.env.DB_INTEGRATED_SECURITY === 'true',
-  },
+  ssl: false,
 };
-
-// Ajusta as opções baseado nas variáveis de ambiente
-if (process.env.BD_HAS_OPTIONS !== 'true') {
-  delete ormConfig.options;
-} else if (!process.env.DB_ENCRYPT && ormConfig.options) {
-  delete ormConfig.options.encrypt;
-}
 
 if (process.env.DB_DOMAIN_CONTROLLER) {
   (ormConfig as any).domain = process.env.DB_DOMAIN_CONTROLLER;
