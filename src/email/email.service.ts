@@ -7,17 +7,25 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class EmailService {
-  private transporter;
+  private readonly transporter;
   private readonly logger = new Logger(EmailService.name);
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
+    this.transporter.verify((error, success) => {
+    if (error) {
+      this.logger.error('Erro na conexão SMTP:', error);
+    } else {
+      this.logger.log('SMTP conectado com sucesso!');
+    }
+  });
   }
 
   async sendCode(email: string, code: string) {
